@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AquaPure Water Bottles - Premium Quality Water Bottles</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- User Header -->
+    <header id="user-header" class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo" id="main-logo" onclick="handleLogoClick()">
+                    <h1>AquaPure</h1>
+                    <span>Premium Water Bottles</span>
+                </div>
+                <nav class="nav" id="user-nav">
+                    <button class="nav-btn active" onclick="showSection('home')">Home</button>
+                    <button class="nav-btn" onclick="showSection('products')">Products</button>
+                    <button class="nav-btn auth-btn" onclick="showSection('auth')">Login / Register</button>
+                    <button class="nav-btn user-btn hidden" onclick="showSection('user-dashboard')">My Account</button>
+                    <button class="nav-btn user-btn hidden" onclick="showSection('my-orders')">My Orders</button>
+                    <button class="nav-btn user-btn hidden" onclick="userLogout()">Logout</button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Admin Header (Hidden by default) -->
+    <header id="admin-header" class="header admin-header hidden">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <h1>AquaPure Admin</h1>
+                    <span>Administration Panel</span>
+                </div>
+                <nav class="nav" id="admin-nav">
+                    <button class="nav-btn active" onclick="showAdminSection('admin-dashboard')">Dashboard</button>
+                    <button class="nav-btn" onclick="showAdminSection('admin-products')">Products</button>
+                    <button class="nav-btn" onclick="showAdminSection('admin-orders')">Orders</button>
+                    <button class="nav-btn" onclick="showAdminSection('admin-users')">Users</button>
+                    <button class="nav-btn" onclick="adminLogout()">Logout</button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- User Main Content -->
+    <main id="user-content">
+        <!-- Home Section -->
+        <section id="home" class="section active">
+            <div class="hero">
+                <div class="container">
+                    <div class="hero-content">
+                        <h2>Premium Quality Water Bottles</h2>
+                        <p>Stay hydrated with our eco-friendly, durable water bottles designed for your active lifestyle.</p>
+                        <button class="btn btn--primary btn--lg" onclick="showSection('products')">Shop Now</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="container">
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <h3>Eco-Friendly</h3>
+                        <p>Made with sustainable materials that are safe for you and the environment</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Durable Design</h3>
+                        <p>Built to last with premium materials that withstand daily use</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Temperature Control</h3>
+                        <p>Keep your drinks at the perfect temperature for hours</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Products Section -->
+        <section id="products" class="section">
+            <div class="container">
+                <h2 class="section-title">Our Water Bottles</h2>
+                <div id="products-grid" class="products-grid">
+                    <!-- Products will be loaded dynamically -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Auth Section -->
+        <section id="auth" class="section">
+            <div class="container">
+                <div class="auth-container">
+                    <!-- Login Form -->
+                    <div id="login-form" class="auth-form active">
+                        <div class="card">
+                            <div class="card__body">
+                                <h2>User Login</h2>
+                                <form id="user-login-form">
+                                    <div class="form-group">
+                                        <label class="form-label">Email</label>
+                                        <input type="email" id="login-email" class="form-control" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Password</label>
+                                        <input type="password" id="login-password" class="form-control" required>
+                                    </div>
+                                    <button type="submit" class="btn btn--primary btn--full-width">Login</button>
+                                </form>
+                                <div class="auth-switch">
+                                    <p>Don't have an account? <button class="link-btn" onclick="showRegister()">Register here</button></p>
+                                    <p><button class="link-btn" onclick="showPasswordReset()">Forgot Password?</button></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Register Form -->
+                    <div id="register-form" class="auth-form">
+                        <div class="card">
+                            <div class="card__body">
+                                <h2>User Registration</h2>
+                                <form id="user-register-form">
+                                    <div class="form-group">
+                                        <label class="form-label">Full Name</label>
+                                        <input type="text" id="register-name" class="form-control" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Email</label>
+                                        <input type="email" id="register-email" class="form-control" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Password</label>
+                                        <input type="password" id="register-password" class="form-control" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Phone</label>
+                                        <input type="tel" id="register-phone" class="form-control" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Address</label>
+                                        <textarea id="register-address" class="form-control" rows="3" required></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn--primary btn--full-width">Register</button>
+                                </form>
+                                <div class="auth-switch">
+                                    <p>Already have an account? <button class="link-btn" onclick="showLogin()">Login here</button></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Password Reset Form -->
+                    <div id="reset-form" class="auth-form">
+                        <div class="card">
+                            <div class="card__body">
+                                <h2>Reset Password</h2>
+                                <form id="password-reset-form">
+                                    <div class="form-group">
+                                        <label class="form-label">Email</label>
+                                        <input type="email" id="reset-email" class="form-control" required>
+                                    </div>
+                                    <button type="submit" class="btn btn--primary btn--full-width">Send Reset Link</button>
+                                </form>
+                                <div class="auth-switch">
+                                    <p><button class="link-btn" onclick="showLogin()">Back to Login</button></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- User Dashboard -->
+        <section id="user-dashboard" class="section">
+            <div class="container">
+                <div class="dashboard-header">
+                    <h2>My Dashboard</h2>
+                    <button class="btn btn--secondary" onclick="showSection('profile')">Edit Profile</button>
+                </div>
+                <div class="dashboard-stats">
+                    <div class="stat-card">
+                        <h3 id="user-total-orders">0</h3>
+                        <p>Total Orders</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="user-total-spent">₹0</h3>
+                        <p>Total Spent</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="user-pending-orders">0</h3>
+                        <p>Pending Orders</p>
+                    </div>
+                </div>
+                <div class="recent-orders">
+                    <h3>Recent Orders</h3>
+                    <div id="user-recent-orders">
+                        <!-- Recent orders will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- My Orders -->
+        <section id="my-orders" class="section">
+            <div class="container">
+                <h2 class="section-title">My Orders</h2>
+                <div id="user-orders-list">
+                    <!-- User orders will be loaded here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Profile Section -->
+        <section id="profile" class="section">
+            <div class="container">
+                <div class="card" style="max-width: 600px; margin: 0 auto;">
+                    <div class="card__body">
+                        <h2>Edit Profile</h2>
+                        <form id="profile-form">
+                            <div class="form-group">
+                                <label class="form-label">Full Name</label>
+                                <input type="text" id="profile-name" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Email</label>
+                                <input type="email" id="profile-email" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Phone</label>
+                                <input type="tel" id="profile-phone" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Address</label>
+                                <textarea id="profile-address" class="form-control" rows="3" required></textarea>
+                            </div>
+                            <div class="btn-group">
+                                <button type="submit" class="btn btn--primary">Update Profile</button>
+                                <button type="button" class="btn btn--secondary" onclick="showSection('user-dashboard')">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Admin Main Content (Hidden by default) -->
+    <main id="admin-content" class="hidden">
+        <!-- Admin Login -->
+        <section id="admin-login" class="section admin-section active">
+            <div class="container">
+                <div class="admin-login">
+                    <div class="card">
+                        <div class="card__body">
+                            <h2>Administrator Login</h2>
+                            <form id="admin-login-form">
+                                <div class="form-group">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" id="admin-email" class="form-control" required value="admin@aquapure.com">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Password</label>
+                                    <input type="password" id="admin-password" class="form-control" required value="admin123">
+                                </div>
+                                <button type="submit" class="btn btn--primary btn--full-width">Admin Login</button>
+                            </form>
+                            <div class="auth-switch">
+                                <p><button class="link-btn" onclick="showUserInterface()">Back to User Site</button></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Admin Dashboard -->
+        <section id="admin-dashboard" class="section admin-section">
+            <div class="container">
+                <h2 class="section-title">Admin Dashboard</h2>
+                <div class="admin-stats">
+                    <div class="stat-card">
+                        <h3 id="total-products">0</h3>
+                        <p>Total Products</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="total-orders">0</h3>
+                        <p>Total Orders</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="total-users">0</h3>
+                        <p>Registered Users</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="total-revenue">₹0</h3>
+                        <p>Total Revenue</p>
+                    </div>
+                </div>
+                <div class="dashboard-alerts">
+                    <h3>Low Stock Alerts</h3>
+                    <div id="low-stock-alerts">
+                        <!-- Low stock alerts will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Admin Products -->
+        <section id="admin-products" class="section admin-section">
+            <div class="container">
+                <div class="admin-section-header">
+                    <h2>Product Management</h2>
+                    <div class="admin-actions">
+                        <button class="btn btn--secondary" onclick="bulkRestock()">Bulk Restock</button>
+                        <button class="btn btn--primary" onclick="showAddProductModal()">Add New Product</button>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table id="admin-products-table" class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Price</th>
+                                <th>Stock</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Products will be loaded dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Admin Orders -->
+        <section id="admin-orders" class="section admin-section">
+            <div class="container">
+                <div class="admin-section-header">
+                    <h2>Order Management</h2>
+                    <select id="status-filter" class="form-control" style="width: auto;" onchange="filterOrders()">
+                        <option value="">All Orders</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Approved">Approved</option>
+                        <option value="Rejected">Rejected</option>
+                        <option value="Delivered">Delivered</option>
+                    </select>
+                </div>
+                <div class="table-container">
+                    <table id="admin-orders-table" class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Product</th>
+                                <th>Quantity</th>
+                                <th>Total</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Orders will be loaded dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Admin Users -->
+        <section id="admin-users" class="section admin-section">
+            <div class="container">
+                <h2 class="section-title">User Management</h2>
+                <div class="table-container">
+                    <table id="admin-users-table" class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Registered</th>
+                                <th>Orders</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Users will be loaded dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>AquaPure</h4>
+                    <p>Premium quality water bottles for your active lifestyle.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact Us</h4>
+                    <p>Phone: +91 9876543210</p>
+                    <p>Email: contact@aquapure.com</p>
+                    <p>Address: 123 Business Park, Tech City, India</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modals -->
+    <!-- Order Modal -->
+    <div id="order-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Place Order</h3>
+                <button class="modal-close" onclick="closeModal('order-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="order-form">
+                    <input type="hidden" id="order-product-id">
+                    <div class="order-product-info">
+                        <img id="order-product-image" src="" alt="">
+                        <div>
+                            <h4 id="order-product-name"></h4>
+                            <p id="order-product-price"></p>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Full Name *</label>
+                        <input type="text" id="customer-name" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Email *</label>
+                        <input type="email" id="customer-email" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Phone Number *</label>
+                        <input type="tel" id="customer-phone" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Delivery Address *</label>
+                        <textarea id="customer-address" class="form-control" rows="3" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Quantity *</label>
+                        <input type="number" id="order-quantity" class="form-control" min="1" value="1" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Special Instructions</label>
+                        <textarea id="special-instructions" class="form-control" rows="2"></textarea>
+                    </div>
+                    
+                    <div class="order-total">
+                        <strong>Total Amount: ₹<span id="total-amount">0</span></strong>
+                    </div>
+                    
+                    <button type="submit" class="btn btn--primary btn--full-width">Place Order</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Product Modal -->
+    <div id="add-product-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="product-modal-title">Add New Product</h3>
+                <button class="modal-close" onclick="closeModal('add-product-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="add-product-form">
+                    <input type="hidden" id="edit-product-id">
+                    <div class="form-group">
+                        <label class="form-label">Product Name *</label>
+                        <input type="text" id="product-name" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Price (₹) *</label>
+                        <input type="number" id="product-price" class="form-control" min="0" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Description *</label>
+                        <textarea id="product-description" class="form-control" rows="3" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Image URL *</label>
+                        <input type="url" id="product-image" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Stock Quantity *</label>
+                        <input type="number" id="product-stock" class="form-control" min="0" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Category *</label>
+                        <select id="product-category" class="form-control" required>
+                            <option value="">Select Category</option>
+                            <option value="Premium">Premium</option>
+                            <option value="Eco-Friendly">Eco-Friendly</option>
+                            <option value="Sports">Sports</option>
+                            <option value="Kids">Kids</option>
+                            <option value="Custom">Custom</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="btn btn--primary btn--full-width" id="product-submit-btn">Add Product</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Restock Modal -->
+    <div id="restock-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Restock Product</h3>
+                <button class="modal-close" onclick="closeModal('restock-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="restock-product-info">
+                    <h4 id="restock-product-name"></h4>
+                    <p>Current Stock: <span id="restock-current-stock"></span></p>
+                </div>
+                
+                <div class="restock-options">
+                    <h5>Quick Options:</h5>
+                    <div class="restock-quick-buttons">
+                        <button class="btn btn--secondary" onclick="setRestockQuantity(10)">+10 units</button>
+                        <button class="btn btn--secondary" onclick="setRestockQuantity(25)">+25 units</button>
+                        <button class="btn btn--secondary" onclick="setRestockQuantity(50)">+50 units</button>
+                    </div>
+                </div>
+                
+                <form id="restock-form">
+                    <input type="hidden" id="restock-product-id">
+                    <div class="form-group">
+                        <label class="form-label">Quantity to Add *</label>
+                        <input type="number" id="restock-quantity" class="form-control" min="1" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Reason</label>
+                        <select id="restock-reason" class="form-control">
+                            <option value="Regular restock">Regular restock</option>
+                            <option value="High demand">High demand</option>
+                            <option value="Emergency restock">Emergency restock</option>
+                            <option value="Seasonal restock">Seasonal restock</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="restock-summary">
+                        New Stock Level: <strong><span id="new-stock-level">0</span> units</strong>
+                    </div>
+                    
+                    <button type="submit" class="btn btn--primary btn--full-width">Confirm Restock</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stock History Modal -->
+    <div id="stock-history-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Stock History</h3>
+                <button class="modal-close" onclick="closeModal('stock-history-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="stock-history-content">
+                    <!-- Stock history will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Details Modal -->
+    <div id="order-details-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Order Details</h3>
+                <button class="modal-close" onclick="closeModal('order-details-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="order-details-content">
+                    <!-- Order details will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="success-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Success!</h3>
+                <button class="modal-close" onclick="closeModal('success-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="success-message"></div>
+                <button class="btn btn--primary btn--full-width" onclick="closeModal('success-modal')">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bulk Restock Modal -->
+    <div id="bulk-restock-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Bulk Restock</h3>
+                <button class="modal-close" onclick="closeModal('bulk-restock-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="bulk-restock-form">
+                    <div class="form-group">
+                        <label class="form-label">Add to All Products</label>
+                        <input type="number" id="bulk-quantity" class="form-control" min="1" placeholder="Quantity to add to all products">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Reason</label>
+                        <select id="bulk-reason" class="form-control">
+                            <option value="Bulk restock">Bulk restock</option>
+                            <option value="Inventory update">Inventory update</option>
+                            <option value="Seasonal preparation">Seasonal preparation</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="btn btn--primary btn--full-width">Apply to All Products</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
