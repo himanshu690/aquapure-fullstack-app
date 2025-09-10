@@ -1,5 +1,5 @@
 // --- CONFIGURATION ---
-const API_URL = 'https://aquapure-backend.onrender.com/api';
+const API_URL = 'http://localhost:5000/api';
 
 // --- APPLICATION STATE ---
 let currentUser = null;
@@ -17,8 +17,18 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log('Application initialized successfully');
 });
 
+// --- LOADER ---
+function showLoader() {
+    document.getElementById('loader').classList.add('active');
+}
+
+function hideLoader() {
+    document.getElementById('loader').classList.remove('active');
+}
+
 // --- API HELPER FUNCTIONS ---
 async function apiRequest(endpoint, method = 'GET', body = null, authenticated = false) {
+    showLoader(); // Show spinner before request
     const headers = { 'Content-Type': 'application/json' };
     const token = localStorage.getItem('aquapure_token');
 
@@ -46,6 +56,8 @@ async function apiRequest(endpoint, method = 'GET', body = null, authenticated =
         console.error(`API Error on ${method} ${endpoint}:`, error);
         alert(`Error: ${error.message}`);
         throw error;
+    } finally {
+        hideLoader(); // Hide spinner after request is done
     }
 }
 
@@ -110,8 +122,7 @@ async function adminLogin(email, password) {
         localStorage.setItem('aquapure_user', JSON.stringify(data.user));
         currentUser = data.user;
 
-        showAdminSection('admin-dashboard');
-        loadAdminData();
+        showAdminInterface(); // Use the main function to set up the interface
         showSuccessMessage('Admin login successful! Welcome to the Admin Panel.');
     } catch (error) {
         // Error is alerted in apiRequest
@@ -125,6 +136,8 @@ function adminLogout() {
     showUserInterface();
     showSection('home');
     showSuccessMessage('Admin logged out successfully.');
+    // Hide admin buttons on logout
+    document.querySelectorAll('.admin-nav-btn').forEach(btn => btn.classList.add('hidden'));
 }
 
 // --- UI & NAVIGATION ---
@@ -191,11 +204,15 @@ function showAdminInterface() {
     document.getElementById('admin-header').classList.remove('hidden');
     document.getElementById('user-content').classList.add('hidden');
     document.getElementById('admin-content').classList.remove('hidden');
+    
+    const adminNavButtons = document.querySelectorAll('.admin-nav-btn');
 
     if (currentUser && currentUser.role === 'admin') {
+        adminNavButtons.forEach(btn => btn.classList.remove('hidden'));
         showAdminSection('admin-dashboard');
         loadAdminData();
     } else {
+        adminNavButtons.forEach(btn => btn.classList.add('hidden'));
         showAdminSection('admin-login');
     }
     window.location.hash = 'admin';

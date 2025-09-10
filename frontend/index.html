@@ -7,7 +7,10 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- User Header -->
+    <div id="loader" class="loader">
+        <div class="spinner"></div>
+    </div>
+
     <header id="user-header" class="header">
         <div class="container">
             <div class="header-content">
@@ -27,7 +30,6 @@
         </div>
     </header>
 
-    <!-- Admin Header (Hidden by default) -->
     <header id="admin-header" class="header admin-header hidden">
         <div class="container">
             <div class="header-content">
@@ -36,19 +38,17 @@
                     <span>Administration Panel</span>
                 </div>
                 <nav class="nav" id="admin-nav">
-                    <button class="nav-btn active" onclick="showAdminSection('admin-dashboard')">Dashboard</button>
-                    <button class="nav-btn" onclick="showAdminSection('admin-products')">Products</button>
-                    <button class="nav-btn" onclick="showAdminSection('admin-orders')">Orders</button>
-                    <button class="nav-btn" onclick="showAdminSection('admin-users')">Users</button>
-                    <button class="nav-btn" onclick="adminLogout()">Logout</button>
+                    <button class="nav-btn admin-nav-btn active" onclick="showAdminSection('admin-dashboard')">Dashboard</button>
+                    <button class="nav-btn admin-nav-btn" onclick="showAdminSection('admin-products')">Products</button>
+                    <button class="nav-btn admin-nav-btn" onclick="showAdminSection('admin-orders')">Orders</button>
+                    <button class="nav-btn admin-nav-btn" onclick="showAdminSection('admin-users')">Users</button>
+                    <button class="nav-btn admin-nav-btn" onclick="adminLogout()">Logout</button>
                 </nav>
             </div>
         </div>
     </header>
 
-    <!-- User Main Content -->
     <main id="user-content">
-        <!-- Home Section -->
         <section id="home" class="section active">
             <div class="hero">
                 <div class="container">
@@ -78,21 +78,17 @@
             </div>
         </section>
 
-        <!-- Products Section -->
         <section id="products" class="section">
             <div class="container">
                 <h2 class="section-title">Our Water Bottles</h2>
                 <div id="products-grid" class="products-grid">
-                    <!-- Products will be loaded dynamically -->
-                </div>
+                    </div>
             </div>
         </section>
 
-        <!-- Auth Section -->
         <section id="auth" class="section">
             <div class="container">
                 <div class="auth-container">
-                    <!-- Login Form -->
                     <div id="login-form" class="auth-form active">
                         <div class="card">
                             <div class="card__body">
@@ -116,7 +112,6 @@
                         </div>
                     </div>
 
-                    <!-- Register Form -->
                     <div id="register-form" class="auth-form">
                         <div class="card">
                             <div class="card__body">
@@ -151,7 +146,6 @@
                         </div>
                     </div>
 
-                    <!-- Password Reset Form -->
                     <div id="reset-form" class="auth-form">
                         <div class="card">
                             <div class="card__body">
@@ -173,7 +167,6 @@
             </div>
         </section>
 
-        <!-- User Dashboard -->
         <section id="user-dashboard" class="section">
             <div class="container">
                 <div class="dashboard-header">
@@ -197,23 +190,19 @@
                 <div class="recent-orders">
                     <h3>Recent Orders</h3>
                     <div id="user-recent-orders">
-                        <!-- Recent orders will be loaded here -->
-                    </div>
+                        </div>
                 </div>
             </div>
         </section>
 
-        <!-- My Orders -->
         <section id="my-orders" class="section">
             <div class="container">
                 <h2 class="section-title">My Orders</h2>
                 <div id="user-orders-list">
-                    <!-- User orders will be loaded here -->
-                </div>
+                    </div>
             </div>
         </section>
 
-        <!-- Profile Section -->
         <section id="profile" class="section">
             <div class="container">
                 <div class="card" style="max-width: 600px; margin: 0 auto;">
@@ -247,9 +236,7 @@
         </section>
     </main>
 
-    <!-- Admin Main Content (Hidden by default) -->
     <main id="admin-content" class="hidden">
-        <!-- Admin Login -->
         <section id="admin-login" class="section admin-section active">
             <div class="container">
                 <div class="admin-login">
@@ -276,7 +263,6 @@
             </div>
         </section>
 
-        <!-- Admin Dashboard -->
         <section id="admin-dashboard" class="section admin-section">
             <div class="container">
                 <h2 class="section-title">Admin Dashboard</h2>
@@ -301,13 +287,11 @@
                 <div class="dashboard-alerts">
                     <h3>Low Stock Alerts</h3>
                     <div id="low-stock-alerts">
-                        <!-- Low stock alerts will be loaded here -->
-                    </div>
+                        </div>
                 </div>
             </div>
         </section>
 
-        <!-- Admin Products -->
         <section id="admin-products" class="section admin-section">
             <div class="container">
                 <div class="admin-section-header">
@@ -330,14 +314,12 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- Products will be loaded dynamically -->
-                        </tbody>
+                            </tbody>
                     </table>
                 </div>
             </div>
         </section>
 
-        <!-- Admin Orders -->
         <section id="admin-orders" class="section admin-section">
             <div class="container">
                 <div class="admin-section-header">
@@ -365,14 +347,12 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- Orders will be loaded dynamically -->
-                        </tbody>
+                            </tbody>
                     </table>
                 </div>
             </div>
         </section>
 
-        <!-- Admin Users -->
         <section id="admin-users" class="section admin-section">
             <div class="container">
                 <h2 class="section-title">User Management</h2>
@@ -389,15 +369,13 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- Users will be loaded dynamically -->
-                        </tbody>
+                            </tbody>
                     </table>
                 </div>
             </div>
         </section>
     </main>
 
-    <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
@@ -415,8 +393,6 @@
         </div>
     </footer>
 
-    <!-- Modals -->
-    <!-- Order Modal -->
     <div id="order-modal" class="modal hidden">
         <div class="modal-content">
             <div class="modal-header">
@@ -474,7 +450,6 @@
         </div>
     </div>
 
-    <!-- Add Product Modal -->
     <div id="add-product-modal" class="modal hidden">
         <div class="modal-content">
             <div class="modal-header">
@@ -527,7 +502,6 @@
         </div>
     </div>
 
-    <!-- Restock Modal -->
     <div id="restock-modal" class="modal hidden">
         <div class="modal-content">
             <div class="modal-header">
@@ -577,7 +551,6 @@
         </div>
     </div>
 
-    <!-- Stock History Modal -->
     <div id="stock-history-modal" class="modal hidden">
         <div class="modal-content">
             <div class="modal-header">
@@ -586,13 +559,11 @@
             </div>
             <div class="modal-body">
                 <div id="stock-history-content">
-                    <!-- Stock history will be loaded here -->
-                </div>
+                    </div>
             </div>
         </div>
     </div>
 
-    <!-- Order Details Modal -->
     <div id="order-details-modal" class="modal hidden">
         <div class="modal-content">
             <div class="modal-header">
@@ -601,13 +572,11 @@
             </div>
             <div class="modal-body">
                 <div id="order-details-content">
-                    <!-- Order details will be populated here -->
-                </div>
+                    </div>
             </div>
         </div>
     </div>
 
-    <!-- Success Modal -->
     <div id="success-modal" class="modal hidden">
         <div class="modal-content">
             <div class="modal-header">
@@ -621,7 +590,6 @@
         </div>
     </div>
 
-    <!-- Bulk Restock Modal -->
     <div id="bulk-restock-modal" class="modal hidden">
         <div class="modal-content">
             <div class="modal-header">
