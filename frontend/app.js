@@ -1,5 +1,5 @@
 // --- CONFIGURATION ---
-const API_URL = 'https://aquapure-backend.onrender.com/api';
+const API_URL = 'http://localhost:5000/api';
 
 // --- APPLICATION STATE ---
 let currentUser = null;
@@ -174,6 +174,8 @@ function showAdminSection(sectionId) {
         'admin-products': loadAdminProducts,
         'admin-orders': () => loadAdminOrders(),
         'admin-users': loadAdminUsers,
+        'admin-feedback': loadAdminFeedback,
+        
     };
     loaders[sectionId]?.();
 }
@@ -181,13 +183,16 @@ function showAdminSection(sectionId) {
 function updateUserNavigation() {
     const authBtns = document.querySelectorAll('.auth-btn');
     const userBtns = document.querySelectorAll('.user-btn');
+    const greetingEl = document.getElementById('user-greeting');
 
     if (currentUser && currentUser.role === 'user') {
         authBtns.forEach(btn => btn.classList.add('hidden'));
         userBtns.forEach(btn => btn.classList.remove('hidden'));
+        greetingEl.textContent = `Welcome, ${currentUser.name.split(' ')[0]}`;
     } else {
         authBtns.forEach(btn => btn.classList.remove('hidden'));
         userBtns.forEach(btn => btn.classList.add('hidden'));
+        greetingEl.textContent = ''; 
     }
 }
 
@@ -646,7 +651,10 @@ function setupEventListeners() {
     document.getElementById('add-product-form').addEventListener('submit', (e) => { e.preventDefault(); addOrUpdateProduct(); });
     document.getElementById('restock-form').addEventListener('submit', (e) => { e.preventDefault(); submitRestock(); });
     document.getElementById('bulk-restock-form').addEventListener('submit', (e) => { e.preventDefault(); submitBulkRestock(); });
-    
+    document.getElementById('feedback-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        submitFeedback();
+    });
     // Dynamic inputs
     document.getElementById('order-quantity').addEventListener('input', updateOrderTotal);
     document.getElementById('restock-quantity').addEventListener('input', updateNewStockLevel);
@@ -670,6 +678,46 @@ function updateNewStockLevel() {
 function setRestockQuantity(quantity) {
     document.getElementById('restock-quantity').value = quantity;
     updateNewStockLevel();
+}
+
+async function submitFeedback() {
+    const feedbackData = {
+        email: document.getElementById('feedback-email').value,
+        message: document.getElementById('feedback-message').value,
+    };
+
+    try {
+        await apiRequest('/feedback', 'POST', feedbackData); // We will create this new endpoint
+        showSuccessMessage('Thank you! Your feedback has been submitted successfully.');
+        document.getElementById('feedback-form').reset();
+    } catch (error) {
+        // The apiRequest helper function already shows an alert on error
+    }
+}
+
+async function loadAdminFeedback() {
+    try {
+        const feedbackEntries = await apiRequest('/feedback', 'GET', null, true);
+        const container = document.getElementById('feedback-list-container');
+        
+        if (!feedbackEntries || feedbackEntries.length === 0) {
+            container.innerHTML = `<div class="empty-state"><p>No feedback or enquiries yet.</p></div>`;
+            return;
+        }
+
+        container.innerHTML = feedbackEntries.map(entry => `
+            <div class="feedback-card">
+                <div class="feedback-header">
+                    <span class="feedback-email">${entry.email}</span>
+                    <span class="feedback-date">${new Date(entry.createdAt).toLocaleString('en-IN')}</span>
+                </div>
+                <p class="feedback-message">${entry.message}</p>
+            </div>
+        `).join('');
+
+    } catch (error) {
+        // Error is handled by apiRequest
+    }
 }
 
 // Make functions globally available

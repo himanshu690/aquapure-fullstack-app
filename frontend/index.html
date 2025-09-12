@@ -15,8 +15,8 @@
         <div class="container">
             <div class="header-content">
                 <div class="logo" id="main-logo" onclick="handleLogoClick()">
-                    <h1>AquaPure</h1>
-                    <span>Premium Water Bottles</span>
+                    <img src="images/logo1.jpg.png" alt="A² Logo" class="logo-img">
+                    <span class="logo-tagline">Your Brand, Your Water</span>
                 </div>
                 <nav class="nav" id="user-nav">
                     <button class="nav-btn active" onclick="showSection('home')">Home</button>
@@ -24,6 +24,7 @@
                     <button class="nav-btn auth-btn" onclick="showSection('auth')">Login / Register</button>
                     <button class="nav-btn user-btn hidden" onclick="showSection('user-dashboard')">My Account</button>
                     <button class="nav-btn user-btn hidden" onclick="showSection('my-orders')">My Orders</button>
+                    <div id="user-greeting" class="nav-greeting user-btn hidden"></div>
                     <button class="nav-btn user-btn hidden" onclick="userLogout()">Logout</button>
                 </nav>
             </div>
@@ -42,11 +43,14 @@
                     <button class="nav-btn admin-nav-btn" onclick="showAdminSection('admin-products')">Products</button>
                     <button class="nav-btn admin-nav-btn" onclick="showAdminSection('admin-orders')">Orders</button>
                     <button class="nav-btn admin-nav-btn" onclick="showAdminSection('admin-users')">Users</button>
+                    <button class="nav-btn admin-nav-btn" onclick="showAdminSection('admin-feedback')">Feedback</button>
                     <button class="nav-btn admin-nav-btn" onclick="adminLogout()">Logout</button>
                 </nav>
             </div>
         </div>
     </header>
+
+    
 
     <main id="user-content">
         <section id="home" class="section active">
@@ -374,6 +378,13 @@
                 </div>
             </div>
         </section>
+
+        <section id="admin-feedback" class="section admin-section">
+            <div class="container">
+                <h2 class="section-title">Feedback & Enquiries</h2>
+                <div id="feedback-list-container"></div>
+            </div>
+        </section>
     </main>
 
     <footer class="footer">
@@ -389,6 +400,20 @@
                     <p>Email: contact@aquapure.com</p>
                     <p>Address: 123 Business Park, Tech City, India</p>
                 </div>
+                
+                <div class="footer-section">
+                    <h4>Get in Touch</h4>
+                    <form id="feedback-form">
+                        <div class="form-group">
+                            <input type="email" id="feedback-email" class="form-control" placeholder="Your Email Address" required>
+                        </div>
+                        <div class="form-group">
+                            <textarea id="feedback-message" class="form-control" rows="3" placeholder="Your feedback or enquiry..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn--primary">Submit</button>
+                    </form>
+                </div>
+
             </div>
         </div>
     </footer>
