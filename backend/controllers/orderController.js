@@ -5,51 +5,62 @@ import Product from '../models/Product.js';
 // @route   POST /api/orders
 // @access  Public
 const createOrder = async (req, res) => {
-    const {
-        userId,
-        customerName,
-        email,
-        phone,
-        address,
-        items,
-        totalAmount,
-        specialInstructions,
-    } = req.body;
+    try {
+        const { userId, customerName, email, phone, address, items } = req.body;
 
-    if (items && items.length === 0) {
-        return res.status(400).json({ message: 'No order items' });
-    }
-
-    // Server-side check for stock
-    for (const item of items) {
-        const product = await Product.findOne({ id: item.productId });
-        if (!product || product.stock < item.quantity) {
-            return res.status(400).json({ message: `Product ${item.productName} is out of stock.` });
+        if (!items || items.length === 0) {
+            return res.status(400).json({ message: 'No order items' });
         }
+
+        // 1. Get product details from the database to ensure prices are correct
+        const productIds = items.map(item => item.productId);
+        const productsFromDB = await Product.find({ id: { $in: productIds } });
+
+        if (productsFromDB.length !== productIds.length) {
+            return res.status(404).json({ message: 'One or more products not found' });
+        }
+
+        let totalAmount = 0;
+        const orderItems = items.map(cartItem => {
+            const product = productsFromDB.find(p => p.id === cartItem.productId);
+            
+            // Check for sufficient stock
+            if (product.stock < cartItem.quantity) {
+                throw new Error(`Not enough stock for ${product.name}. Only ${product.stock} available.`);
+            }
+            
+            totalAmount += product.price * cartItem.quantity;
+            return {
+                productId: product.id,
+                productName: product.name,
+                quantity: cartItem.quantity,
+                price: product.price,
+            };
+        });
+        
+        const order = new Order({
+            orderId: `ORD${Date.now().toString().slice(-6)}`,
+            userId, customerName, email, phone, address,
+            items: orderItems,
+            totalAmount,
+        });
+
+        const createdOrder = await order.save();
+
+        // 3. Update stock for each product
+        for (const item of orderItems) {
+            await Product.updateOne({ id: item.productId }, { $inc: { stock: -item.quantity } });
+        }
+
+        res.status(201).json(createdOrder);
+
+    } catch (error) {
+        res.status(400).json({ message: error.message });
     }
-
-    const order = new Order({
-        orderId: `ORD${Date.now().toString().slice(-6)}`,
-        userId,
-        customerName,
-        email,
-        phone,
-        address,
-        items,
-        totalAmount,
-        specialInstructions,
-    });
-
-    const createdOrder = await order.save();
-    
-    // Decrement stock
-    for (const item of items) {
-        await Product.updateOne({ id: item.productId }, { $inc: { stock: -item.quantity } });
-    }
-
-    res.status(201).json(createdOrder);
 };
 
+
+// Keep the rest of the functions (getUserOrders, getAllOrders, etc.) the same
 // @desc    Get logged in user orders
 // @route   GET /api/orders/myorders
 // @access  Private
@@ -88,8 +99,7 @@ const getOrderById = async (req, res) => {
     const order = await Order.findOne({ orderId: req.params.id });
 
     if (order) {
-        // Simple authorization: only admin or the user who owns the order can view it
-        if (req.user.role === 'admin' || order.userId === req.user.id) {
+        if (req.user.role === 'admin' || (order.userId && order.userId === req.user.id)) {
             res.json(order);
         } else {
             res.status(401).json({ message: 'Not authorized to view this order' });

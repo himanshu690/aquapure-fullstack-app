@@ -501,3 +501,186 @@ a:hover { color: var(--color-primary-hover); }
     /* Removes the top/bottom margin to work better with the flex alignment */
     margin: 0 auto;
 }
+
+/* Add these styles to the end of your style.css file */
+
+/* --- Receipt Page Styles --- */
+.receipt-body {
+    background-color: #F8F9FA;
+    font-family: var(--font-family-base);
+    color: #333;
+}
+
+.receipt-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: #FFFFFF;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    border: 1px solid #DEE2E6;
+}
+
+.receipt-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #DEE2E6;
+    padding-bottom: 1rem;
+    margin-bottom: 2rem;
+}
+
+.company-details {
+    text-align: right;
+}
+
+.customer-details {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+}
+
+.customer-details address {
+    font-style: normal;
+}
+
+.items-section h3 {
+    border-bottom: 1px solid #DEE2E6;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.items-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 2rem;
+}
+
+.items-table th, .items-table td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid #DEE2E6;
+}
+
+.items-table th {
+    background-color: #F8F9FA;
+}
+
+.receipt-footer .totals {
+    text-align: right;
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 2rem;
+}
+
+.thank-you-note {
+    text-align: center;
+    color: #6C757D;
+}
+
+.print-controls {
+    text-align: center;
+    margin: 2rem 0;
+}
+
+/* --- Print-Specific Styles --- */
+@media print {
+    .receipt-body {
+        background-color: #FFFFFF;
+    }
+    .print-controls, .header, .footer {
+        display: none !important;
+    }
+    .receipt-container {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        box-shadow: none;
+        border: none;
+    }
+}
+
+/* Add this to the end of your style.css */
+
+/* Cart Icon Badge */
+.cart-btn {
+    position: relative;
+}
+.cart-count-badge {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    background-color: var(--color-error);
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+    height: 18px;
+    width: 18px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.cart-count-badge.hidden {
+    display: none;
+}
+
+/* Cart Modal Styles */
+#cart-items-container .empty-cart {
+    text-align: center;
+    padding: var(--space-32);
+    color: var(--color-text-secondary);
+}
+.cart-item {
+    display: flex;
+    gap: var(--space-16);
+    align-items: center;
+    padding: var(--space-12) 0;
+    border-bottom: 1px solid var(--color-border);
+}
+.cart-item:last-child {
+    border-bottom: none;
+}
+.cart-item-img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: var(--radius-sm);
+}
+.cart-item-details {
+    flex-grow: 1;
+}
+.cart-item-details h4 {
+    margin: 0 0 var(--space-4) 0;
+    font-size: var(--font-size-base);
+}
+.cart-item-price {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+}
+.cart-item-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+}
+.cart-item-actions input {
+    width: 50px;
+    text-align: center;
+    padding: var(--space-4) var(--space-8);
+}
+.cart-item-actions .remove-btn {
+    background: none;
+    border: none;
+    color: var(--color-error);
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.cart-total {
+    text-align: right;
+    font-size: 1.25rem;
+    font-weight: bold;
+    padding: var(--space-16) 0;
+    border-top: 2px solid var(--color-text);
+    margin-top: var(--space-16);
+    margin-bottom: var(--space-16);
+}

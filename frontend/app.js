@@ -1,5 +1,5 @@
 // --- CONFIGURATION ---
-const API_URL = 'https://aquapure-backend.onrender.com/api';
+const API_URL = 'https://aquapure-backend.onrender.com/';
 
 // --- APPLICATION STATE ---
 let currentUser = null;
@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', function () {
     checkLoginStatus();
     setupEventListeners();
     loadProducts();
+    updateCartIcon();
     showSection('home');
     console.log('Application initialized successfully');
 });
@@ -160,6 +161,116 @@ function showSection(sectionId) {
     loaders[sectionId]?.();
 }
 
+// --- CART MANAGEMENT ---
+function getCart() {
+    return JSON.parse(localStorage.getItem('aquapure_cart')) || [];
+}
+
+function saveCart(cart) {
+    localStorage.setItem('aquapure_cart', JSON.stringify(cart));
+    updateCartIcon();
+    renderCartItems(); // Re-render cart modal whenever cart is saved
+}
+
+function addToCart(productId) {
+    const cart = getCart();
+    const product = products.find(p => p.id === productId);
+    if (!product) return;
+
+    const existingItem = cart.find(item => item.productId === productId);
+    if (existingItem) {
+        existingItem.quantity++;
+    } else {
+        cart.push({
+            productId: product.id,
+            name: product.name,
+            price: product.price,
+            imageUrl: product.imageUrl,
+            quantity: 1
+        });
+    }
+    saveCart(cart);
+    showSuccessMessage(`${product.name} added to cart!`);
+}
+
+function updateCartQuantity(productId, quantity) {
+    let cart = getCart();
+    const item = cart.find(item => item.productId === productId);
+    if (item) {
+        item.quantity = Number(quantity);
+        if (item.quantity <= 0) {
+            cart = cart.filter(i => i.productId !== productId);
+        }
+    }
+    saveCart(cart);
+}
+
+function removeFromCart(productId) {
+    let cart = getCart();
+    cart = cart.filter(item => item.productId !== productId);
+    saveCart(cart);
+}
+
+function updateCartIcon() {
+    const cart = getCart();
+    const badge = document.getElementById('cart-count-badge');
+    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+
+    if (totalItems > 0) {
+        badge.textContent = totalItems;
+        badge.classList.remove('hidden');
+    } else {
+        badge.classList.add('hidden');
+    }
+}
+
+// --- CART UI FUNCTIONS ---
+function openCartModal() {
+    renderCartItems();
+    showModal('cart-modal');
+}
+
+function renderCartItems() {
+    const cart = getCart();
+    const container = document.getElementById('cart-items-container');
+    const cartFooter = document.getElementById('cart-footer');
+
+    if (cart.length === 0) {
+        container.innerHTML = '<p class="empty-cart">Your cart is empty.</p>';
+        cartFooter.classList.add('hidden');
+        return;
+    }
+
+    cartFooter.classList.remove('hidden');
+    container.innerHTML = cart.map(item => `
+        <div class="cart-item">
+            <img src="${item.imageUrl}" alt="${item.name}" class="cart-item-img">
+            <div class="cart-item-details">
+                <h4>${item.name}</h4>
+                <p class="cart-item-price">₹${item.price.toFixed(2)}</p>
+            </div>
+            <div class="cart-item-actions">
+                <input type="number" class="form-control" value="${item.quantity}" min="1" onchange="updateCartQuantity('${item.productId}', this.value)">
+                <button class="remove-btn" onclick="removeFromCart('${item.productId}')">&times;</button>
+            </div>
+        </div>
+    `).join('');
+
+    const totalAmount = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    document.getElementById('cart-total-amount').textContent = totalAmount.toFixed(2);
+}
+
+function openCheckoutModal() {
+    closeModal('cart-modal');
+    if (currentUser) {
+        document.getElementById('checkout-name').value = currentUser.name;
+        document.getElementById('checkout-email').value = currentUser.email;
+        document.getElementById('checkout-phone').value = currentUser.phone || '';
+        document.getElementById('checkout-address').value = currentUser.address || '';
+    }
+    showModal('checkout-modal');
+}
+
 function showAdminSection(sectionId) {
     document.querySelectorAll('#admin-content .admin-section').forEach(section => section.classList.remove('active'));
     document.querySelectorAll('#admin-nav .nav-btn').forEach(btn => btn.classList.remove('active'));
@@ -259,8 +370,8 @@ function renderProducts() {
                 <p>${product.description}</p>
                 <div class="product-price">₹${product.price}</div>
                 <div class="product-stock ${getStockClass(product.stock)}">${getStockText(product.stock)}</div>
-                <button class="btn btn--primary btn--full-width" onclick="openOrderModal('${product.id}')" ${product.stock === 0 ? 'disabled' : ''}>
-                    ${product.stock === 0 ? 'Out of Stock' : 'Order Now'}
+                <button class="btn btn--primary btn--full-width" onclick="addToCart('${product.id}')" ${product.stock === 0 ? 'disabled' : ''}>
+                    ${product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
                 </button>
             </div>
         </div>
@@ -311,38 +422,30 @@ function updateOrderTotal() {
     }
 }
 
+// Replace the old submitOrder function with this one
 async function submitOrder() {
-    const productId = document.getElementById('order-product-id').value;
-    const quantity = parseInt(document.getElementById('order-quantity').value);
-    const product = products.find(p => p.id === productId);
-
-    if (quantity > product.stock) {
-        return alert(`Sorry, only ${product.stock} items available.`);
+    const cart = getCart();
+    if (cart.length === 0) {
+        return alert("Your cart is empty.");
     }
 
     const orderData = {
         userId: currentUser ? currentUser.id : null,
-        customerName: document.getElementById('customer-name').value,
-        email: document.getElementById('customer-email').value,
-        phone: document.getElementById('customer-phone').value,
-        address: document.getElementById('customer-address').value,
-        items: [{
-            productId: product.id,
-            productName: product.name,
-            quantity,
-            price: product.price
-        }],
-        totalAmount: product.price * quantity,
-        specialInstructions: document.getElementById('special-instructions').value
+        customerName: document.getElementById('checkout-name').value,
+        email: document.getElementById('checkout-email').value,
+        phone: document.getElementById('checkout-phone').value,
+        address: document.getElementById('checkout-address').value,
+        items: cart.map(item => ({ productId: item.productId, quantity: item.quantity })),
     };
 
     try {
         const newOrder = await apiRequest('/orders', 'POST', orderData);
-        closeModal('order-modal');
+        closeModal('checkout-modal');
         showSuccessMessage(`Order Placed Successfully! Your Order ID is: ${newOrder.orderId}`);
-        loadProducts(); // Refresh products to show updated stock
+        saveCart([]); // Clear the cart
+        loadProducts(); // Refresh product stock on the page
     } catch (error) {
-        // Error already handled
+        // Error is already handled by apiRequest
     }
 }
 
@@ -470,13 +573,16 @@ async function loadAdminOrders(statusFilter = '') {
             <td>${formatDate(order.orderDate)}</td>
             <td><span class="status-badge status-${order.status.toLowerCase()}">${order.status}</span></td>
             <td>
-                <select onchange="updateOrderStatus('${order.orderId}', this.value)">
-                    <option value="">Update...</option>
-                    <option value="Pending">Pending</option>
-                    <option value="Approved">Approved</option>
-                    <option value="Delivered">Delivered</option>
-                    <option value="Rejected">Rejected</option>
-                </select>
+                <div class="btn-group">
+                <button class="btn btn--sm" onclick="viewReceipt('${order.orderId}')">View Receipt</button>
+                    <select class="form-control" style="font-size: 11px;" onchange="updateOrderStatus('${order.orderId}', this.value)">
+                        <option value="">Update...</option>
+                        <option value="Pending" ${order.status === 'Pending' ? 'selected' : ''}>Pending</option>
+                        <option value="Approved" ${order.status === 'Approved' ? 'selected' : ''}>Approved</option>
+                        <option value="Delivered" ${order.status === 'Delivered' ? 'selected' : ''}>Delivered</option>
+                        <option value="Rejected" ${order.status === 'Rejected' ? 'selected' : ''}>Rejected</option>
+                    </select>
+                </div>
             </td>
         </tr>
     `).join('');
@@ -647,7 +753,7 @@ function setupEventListeners() {
     });
     
     // Modals forms
-    document.getElementById('order-form').addEventListener('submit', (e) => { e.preventDefault(); submitOrder(); });
+    document.getElementById('checkout-form').addEventListener('submit', (e) => { e.preventDefault(); submitOrder(); });
     document.getElementById('add-product-form').addEventListener('submit', (e) => { e.preventDefault(); addOrUpdateProduct(); });
     document.getElementById('restock-form').addEventListener('submit', (e) => { e.preventDefault(); submitRestock(); });
     document.getElementById('bulk-restock-form').addEventListener('submit', (e) => { e.preventDefault(); submitBulkRestock(); });
@@ -718,6 +824,10 @@ async function loadAdminFeedback() {
     } catch (error) {
         // Error is handled by apiRequest
     }
+}
+
+function viewReceipt(orderId) {
+    window.open(`receipt.html?id=${orderId}`, '_blank');
 }
 
 // Make functions globally available

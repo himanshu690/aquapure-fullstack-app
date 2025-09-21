@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Receipt</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="receipt-body">
+
+    <div class="receipt-container">
+        <header class="receipt-header">
+            <div class="logo">
+                <img src="images/logo.jpg" alt="A² Logo" style="height: 60px;">
+            </div>
+            <div class="company-details">
+                <h2>Order Receipt</h2>
+                <p>A² Premium Water Bottles<br>123 Business Park, Tech City, India</p>
+            </div>
+        </header>
+
+        <section class="customer-details">
+            <div class="order-info">
+                <strong>Order ID:</strong> <span id="receipt-order-id"></span><br>
+                <strong>Order Date:</strong> <span id="receipt-order-date"></span>
+            </div>
+            <div class="bill-to">
+                <strong>Bill To:</strong><br>
+                <span id="receipt-customer-name"></span><br>
+                <span id="receipt-customer-email"></span><br>
+                <span id="receipt-customer-phone"></span><br>
+                <address id="receipt-customer-address"></address>
+            </div>
+        </section>
+
+        <section class="items-section">
+            <h3>Order Items</h3>
+            <table class="items-table">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Unit Price</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody id="receipt-items-tbody">
+                    </tbody>
+            </table>
+        </section>
+
+        <footer class="receipt-footer">
+            <div class="totals">
+                <strong>Total Amount:</strong>
+                <span id="receipt-total-amount"></span>
+            </div>
+            <p class="thank-you-note">Thank you for your business!</p>
+        </footer>
+    </div>
+
+    <div class="print-controls">
+        <button class="btn btn--primary" onclick="window.print()">Print Receipt</button>
+    </div>
+
+    <script src="receipt.js"></script>
+</body>
+</html>

@@ -21,6 +21,12 @@
                 <nav class="nav" id="user-nav">
                     <button class="nav-btn active" onclick="showSection('home')">Home</button>
                     <button class="nav-btn" onclick="showSection('products')">Products</button>
+
+                    <button id="cart-btn" class="nav-btn cart-btn" onclick="openCartModal()">
+                        Cart
+                        <span id="cart-count-badge" class="cart-count-badge hidden">0</span>
+                    </button>
+
                     <button class="nav-btn auth-btn" onclick="showSection('auth')">Login / Register</button>
                     <button class="nav-btn user-btn hidden" onclick="showSection('user-dashboard')">My Account</button>
                     <button class="nav-btn user-btn hidden" onclick="showSection('my-orders')">My Orders</button>
@@ -418,62 +424,42 @@
         </div>
     </footer>
 
-    <div id="order-modal" class="modal hidden">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Place Order</h3>
-                <button class="modal-close" onclick="closeModal('order-modal')">&times;</button>
-            </div>
-            <div class="modal-body">
-                <form id="order-form">
-                    <input type="hidden" id="order-product-id">
-                    <div class="order-product-info">
-                        <img id="order-product-image" src="" alt="">
-                        <div>
-                            <h4 id="order-product-name"></h4>
-                            <p id="order-product-price"></p>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">Full Name *</label>
-                        <input type="text" id="customer-name" class="form-control" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">Email *</label>
-                        <input type="email" id="customer-email" class="form-control" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">Phone Number *</label>
-                        <input type="tel" id="customer-phone" class="form-control" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">Delivery Address *</label>
-                        <textarea id="customer-address" class="form-control" rows="3" required></textarea>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">Quantity *</label>
-                        <input type="number" id="order-quantity" class="form-control" min="1" value="1" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">Special Instructions</label>
-                        <textarea id="special-instructions" class="form-control" rows="2"></textarea>
-                    </div>
-                    
-                    <div class="order-total">
-                        <strong>Total Amount: ₹<span id="total-amount">0</span></strong>
-                    </div>
-                    
-                    <button type="submit" class="btn btn--primary btn--full-width">Place Order</button>
-                </form>
+    <div id="cart-modal" class="modal hidden">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Your Shopping Cart</h3>
+            <button class="modal-close" onclick="closeModal('cart-modal')">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div id="cart-items-container">
+                </div>
+            <div id="cart-footer" class="hidden">
+                <div class="cart-total">
+                    <strong>Total: ₹<span id="cart-total-amount">0.00</span></strong>
+                </div>
+                <button class="btn btn--primary btn--full-width" onclick="openCheckoutModal()">Proceed to Checkout</button>
             </div>
         </div>
     </div>
+</div>
+
+<div id="checkout-modal" class="modal hidden">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Checkout</h3>
+            <button class="modal-close" onclick="closeModal('checkout-modal')">&times;</button>
+        </div>
+        <div class="modal-body">
+            <form id="checkout-form">
+                <div class="form-group"><label class="form-label">Full Name *</label><input type="text" id="checkout-name" class="form-control" required></div>
+                <div class="form-group"><label class="form-label">Email *</label><input type="email" id="checkout-email" class="form-control" required></div>
+                <div class="form-group"><label class="form-label">Phone Number *</label><input type="tel" id="checkout-phone" class="form-control" required></div>
+                <div class="form-group"><label class="form-label">Delivery Address *</label><textarea id="checkout-address" class="form-control" rows="3" required></textarea></div>
+                <button type="submit" class="btn btn--primary btn--full-width">Place Order</button>
+            </form>
+        </div>
+    </div>
+</div>
 
     <div id="add-product-modal" class="modal hidden">
         <div class="modal-content">
