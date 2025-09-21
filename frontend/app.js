@@ -1,5 +1,5 @@
 // --- CONFIGURATION ---
-const API_URL = 'https://aquapure-backend.onrender.com/';
+const API_URL = 'https://aquapure-backend.onrender.com/api';
 
 // --- APPLICATION STATE ---
 let currentUser = null;
